@@ -23,7 +23,7 @@ def control_panel():
     default_max_humidity = 70
     default_egg_turn_interval = 60
     default_turning_days = 18
-    
+
     if request.method == 'POST':
         # Get user inputs from the form
         min_temp = float(request.form['min_temp'])
