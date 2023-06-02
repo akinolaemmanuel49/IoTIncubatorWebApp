@@ -71,9 +71,6 @@
 
     // Function to update the chart data
     function updateChartData() {
-        var currentTimestamp = new Date();
-        var fiveSecondsAgo = new Date(currentTimestamp.getTime() - 5 * 1000);
-
         fetch('https://flask-production-8ae1.up.railway.app/sensor/data')
             .then(response => response.json())
             .then(data => {
@@ -82,11 +79,8 @@
                     return;
                 }
 
-                var timestamp = new Date(data.timestamp);
-                if (timestamp >= fiveSecondsAgo && timestamp <= currentTimestamp) {
-                    temperatureQueue.enqueue({ timestamp: data.timestamp, temperature: data.temperature });
-                    humidityQueue.enqueue({ timestamp: data.timestamp, humidity: data.humidity });
-                }
+                temperatureQueue.enqueue({ timestamp: data.timestamp, temperature: data.temperature });
+                humidityQueue.enqueue({ timestamp: data.timestamp, humidity: data.humidity });
 
                 // Update chart data with queue contents
                 myChart.data.labels = temperatureQueue.queue.map(item => item.timestamp);
