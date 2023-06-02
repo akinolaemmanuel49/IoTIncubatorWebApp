@@ -74,7 +74,7 @@
         var currentTimestamp = new Date();
         var fiveSecondsAgo = new Date(currentTimestamp.getTime() - 5 * 1000);
 
-        fetch('http://localhost:5001/sensor/data')
+        fetch('https://flask-production-8ae1.up.railway.app/sensor/data')
             .then(response => response.json())
             .then(data => {
                 if (typeof data !== 'object') {
