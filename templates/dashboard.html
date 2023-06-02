@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+<!-- Custom styles for this template -->
+{% block styles %}
+<link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+{% endblock %}
+
+<body>
+    {% block content %}
+    <!-- Component for Incubator Status -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="col-sm-auto">
+            <h1 class="h2">Dashboard</h1>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Incubator Status</h5>
+                    <div class="status-indicator">
+                        <span id="status" class="status-icon"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Component for Temperature, Humidity, Refill Water, and Motion Detection -->
+        <div class="col-sm-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Incubating Chamber Conditions</h5>
+                    <p class="card-text digi-face">
+                        Temperature:
+                        <span id="temperature" class="digi-face"></span>°C
+                    </p>
+                    <p class="card-text digi-face">
+                        Humidity:
+                        <span id="humidity" class="digi-face"></span>%
+                    </p>
+                    <p class="card-text digi-face">
+                        Refill Water:
+                        <span id="water-level" class="status-text"></span>
+                    </p>
+                    <p class="card-text digi-face">
+                        Motion Detection:
+                        <span id="motion" class="status-text"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% endblock %}
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/realtimeSensorReadings.js') }}"></script>
+    {% endblock %}
+</body>
+
+</html>

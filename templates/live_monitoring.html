@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+<!-- Custom styles for this template -->
+{% block styles %}
+<link href="{{ url_for('static', filename='css/liveMonitoring.css') }}" rel="stylesheet">
+{% endblock %}
+
+<body>
+    {% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">{{ heading }}</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                    <span data-feather="calendar"></span>
+                    This week
+                </button>
+            </div>
+        </div>
+
+        <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Incubating Chamber Conditions</h5>
+                    <p class="card-text">Temperature: <span id="temperature">-</span>°C</p>
+                    <p class="card-text">Humidity: <span id="humidity">-</span>%</p>
+                    <p class="card-text">Refill Water Level: <span id="water-level">-</span></p>
+                    <p class="card-text">Motion Detection: <span id="motion">-</span></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% endblock %}
+    </div>
+    </div>
+
+    {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
+    <script src="{{ url_for('static', filename='js/liveMonitoring.js')}}"></script>
+    {% endblock %}
+</body>
+
+</html>

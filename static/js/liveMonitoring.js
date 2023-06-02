@@ -3,7 +3,10 @@
 (function () {
     'use strict'
 
-    feather.replace({ 'aria-hidden': 'true' })
+    var temperature = document.getElementById('temperature');
+    var humidity = document.getElementById('humidity');
+    var waterLevel = document.getElementById('water-level');
+    var motionDetection = document.getElementById('motion');
 
     // Graphs
     var ctx = document.getElementById('myChart')
@@ -91,6 +94,11 @@
                 myChart.data.datasets[1].data = humidityQueue.queue.map(item => item.humidity);
 
                 myChart.update();
+                temperature.textContent = data.temperature.toFixed(2);
+                humidity.textContent = data.humidity.toFixed(2);
+                waterLevel.textContent = data.waterLevelSensorState;
+                motionDetection.textContent = data.motionSensorState;
+
             })
             .catch(error => console.error(error));
     }
