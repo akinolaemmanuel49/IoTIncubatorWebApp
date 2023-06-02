@@ -1,0 +1,100 @@
+/* globals Chart:false, feather:false */
+
+(function () {
+    'use strict'
+
+    feather.replace({ 'aria-hidden': 'true' })
+
+    // Graphs
+    var ctx = document.getElementById('myChart')
+    // eslint-disable-next-line no-unused-vars
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Temperature',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                data: []
+            },
+            {
+                label: 'Humidity',
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                data: []
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false,
+                        suggestedMax: 100
+                    }
+                }]
+            },
+            legend: {
+                display: true
+            }
+        }
+    });
+
+    // Queue implementation
+    function Queue(size) {
+        this.queue = [];
+        this.size = size;
+    }
+
+    Queue.prototype.enqueue = function (item) {
+        this.queue.push(item);
+        if (this.queue.length > this.size) {
+            this.queue.shift();
+        }
+    }
+
+    Queue.prototype.dequeue = function () {
+        return this.queue.shift();
+    }
+
+    Queue.prototype.isEmpty = function () {
+        return this.queue.length === 0;
+    }
+
+    // Create queues for temperature and humidity data
+    var temperatureQueue = new Queue(5);
+    var humidityQueue = new Queue(5);
+
+    // Function to update the chart data
+    function updateChartData() {
+        var currentTimestamp = new Date();
+        var fiveSecondsAgo = new Date(currentTimestamp.getTime() - 5 * 1000);
+
+        fetch('http://localhost:5001/sensor/data')
+            .then(response => response.json())
+            .then(data => {
+                if (typeof data !== 'object') {
+                    console.error('Invalid data format:', data);
+                    return;
+                }
+
+                var timestamp = new Date(data.timestamp);
+                if (timestamp >= fiveSecondsAgo && timestamp <= currentTimestamp) {
+                    temperatureQueue.enqueue({ timestamp: data.timestamp, temperature: data.temperature });
+                    humidityQueue.enqueue({ timestamp: data.timestamp, humidity: data.humidity });
+                }
+
+                // Update chart data with queue contents
+                myChart.data.labels = temperatureQueue.queue.map(item => item.timestamp);
+                myChart.data.datasets[0].data = temperatureQueue.queue.map(item => item.temperature);
+                myChart.data.datasets[1].data = humidityQueue.queue.map(item => item.humidity);
+
+                myChart.update();
+            })
+            .catch(error => console.error(error));
+    }
+
+    // Update the chart every 1 second
+    setInterval(updateChartData, 1000);
+})();
