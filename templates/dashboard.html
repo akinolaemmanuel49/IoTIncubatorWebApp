@@ -44,6 +44,45 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Incubating Chamber Configuration</h5>
+                    <p class="card-text">
+                        Max Temperature:
+                        <span id="temperature-config">{{ max_temp }}</span>°C
+                    </p>
+                    <p class="card-text">
+                        Min Temperature:
+                        <span id="temperature-config">{{ min_temp }}</span>°C
+                    </p>
+                    <p class="card-text">
+                        Max Humidity:
+                        <span id="humidity-config">{{ max_humidity }}</span>%
+                    </p>
+                    <p class="card-text">
+                        Min Humidity:
+                        <span id="humidity-config">{{ min_humidity }}</span>%
+                    </p>
+                    <p class="card-text">
+                        Egg Turn Interval:
+                        <span id="egg-turn-config">{{ egg_turn_interval }}</span> hours
+                    </p>
+                    <p class="card-text">
+                        Egg Turning Starts On Day:
+                        <span id="egg-turn-config">{{ egg_turning_start }}</span>
+                    </p>
+                    <p class="card-text">
+                        Incubation Egg Turning Period:
+                        <span id="egg-turning-period-config">{{ incubation_egg_turn_period }}</span> days
+                    </p>
+                    <p class="card-text">
+                        Incubation Period:
+                        <span id="incubation-period-config">{{ incubation_period }}</span> days
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
     {% endblock %}
     {% block scripts %}

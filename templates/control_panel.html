@@ -8,7 +8,7 @@
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
     <div class="col-sm-auto">
         <h1 class="h2">IoT Incubator</h1>
-        <form method="POST" action="/">
+        <form method="POST">
             <div class="form-group">
                 <label for="min_temp">Min Temperature:</label>
                 <input type="number" step="1" class="form-control" name="min_temp" placeholder="50" value="{{ min_temp }}">
@@ -30,13 +30,23 @@
             </div>
 
             <div class="form-group">
-                <label for="egg_turn_interval">Egg Turn Interval (in minutes):</label>
-                <input type="number" class="form-control" name="egg_turn_interval" placeholder="45" value="{{ egg_turn_interval }}">
+                <label for="egg_turn_interval">Egg Turn Interval (in hours):</label>
+                <input type="number" class="form-control" name="egg_turn_interval" placeholder="4.8" value="{{ egg_turn_interval }}">
             </div>
 
             <div class="form-group">
-                <label for="turning_days">Number of Egg Turning Days:</label>
-                <input type="number" class="form-control" name="turning_days" placeholder="18" value="{{ turning_days }}">
+                <label for="egg_turning_starts">Egg Turning Starts On:</label>
+                <input type="number" class="form-control" name="egg_turning_start" placeholder="3" value="{{ egg_turning_start }}">
+            </div>
+
+            <div class="form-group">
+                <label for="incubation_egg_turn_period">Incubation Egg Turning Period:</label>
+                <input type="number" class="form-control" name="incubation_egg_turn_period" placeholder="18" value="{{ incubation_egg_turn_period }}">
+            </div>
+
+            <div class="form-group">
+                <label for="incubation_period">Incubation Period:</label>
+                <input type="number" class="form-control" name="incubation_period" placeholder="21" value="{{ incubation_period }}">
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>

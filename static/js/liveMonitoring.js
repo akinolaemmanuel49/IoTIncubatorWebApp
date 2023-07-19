@@ -71,32 +71,35 @@
 
     // Function to update the chart data
     function updateChartData() {
-        fetch('https://flask-production-8ae1.up.railway.app/sensor/data')
-            .then(response => response.json())
-            .then(data => {
-                if (typeof data !== 'object') {
-                    console.error('Invalid data format:', data);
-                    return;
-                }
+        // setTimeout(() => {
+            // fetch('https://flask-production-8ae1.up.railway.app/sensor/data')
+            fetch('http://localhost:5000/sensor/data')
+                .then(response => response.json())
+                .then(data => {
+                    if (typeof data !== 'object') {
+                        console.error('Invalid data format:', data);
+                        return;
+                    }
 
-                temperatureQueue.enqueue({ timestamp: data.timestamp, temperature: data.temperature });
-                humidityQueue.enqueue({ timestamp: data.timestamp, humidity: data.humidity });
+                    temperatureQueue.enqueue({ timestamp: data.timestamp, temperature: data.temperature });
+                    humidityQueue.enqueue({ timestamp: data.timestamp, humidity: data.humidity });
 
-                // Update chart data with queue contents
-                myChart.data.labels = temperatureQueue.queue.map(item => item.timestamp);
-                myChart.data.datasets[0].data = temperatureQueue.queue.map(item => item.temperature);
-                myChart.data.datasets[1].data = humidityQueue.queue.map(item => item.humidity);
+                    // Update chart data with queue contents
+                    myChart.data.labels = temperatureQueue.queue.map(item => item.timestamp);
+                    myChart.data.datasets[0].data = temperatureQueue.queue.map(item => item.temperature);
+                    myChart.data.datasets[1].data = humidityQueue.queue.map(item => item.humidity);
 
-                myChart.update();
-                temperature.textContent = data.temperature.toFixed(2);
-                humidity.textContent = data.humidity.toFixed(2);
-                waterLevel.textContent = data.waterLevelSensorState;
-                motionDetection.textContent = data.motionSensorState;
+                    myChart.update();
+                    temperature.textContent = data.temperature.toFixed(2);
+                    humidity.textContent = data.humidity.toFixed(2);
+                    waterLevel.textContent = data.waterLevelSensorState;
+                    motionDetection.textContent = data.motionSensorState;
 
-            })
-            .catch(error => console.error(error));
+                })
+                .catch(error => console.error(error));
+        // }, 5000);
     }
 
-    // Update the chart every 1 second
-    setInterval(updateChartData, 1000);
+    // Update the chart every 5 second
+    setInterval(updateChartData, 5000);
 })();
