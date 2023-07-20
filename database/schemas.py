@@ -15,14 +15,11 @@ class User(UserMixin, Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(80), unique=True, nullable=False)
+    email = Column(String(280), unique=True, nullable=False)
     passwordhash = Column(String, nullable=False)
-    role = Column(String(5), nullable=False, default="USER")
     sessions = relationship("SessionData", back_populates="user")
+    sent_messages = relationship("Message", back_populates="sender")
 
-    def get_id(self):
-        return self.id
-    
     def __repr__(self):
         return f"User(username={self.username})"
 
@@ -43,6 +40,8 @@ class SessionData(Base):
     session_start = Column(
         DateTime, default=datetime.utcnow, server_default=func.now())
     session_duration = Column(Integer, nullable=False)
+    debug_mode = Column(Boolean, nullable=False, default=True)
+
     sensor_data = relationship("SensorData", back_populates="session_data")
 
     user = relationship("User", back_populates="sessions")
@@ -134,3 +133,14 @@ class Schedule(Base):
             self.calculate_next_scheduled_time()
             self.motor_state = False
             return False
+
+
+class Message(Base):
+    __tablename__ = 'messages'
+
+    id = Column(Integer, primary_key=True)
+    subject = Column(String)
+    body = Column(String)
+    sender_id = Column(Integer, ForeignKey('user.id'))
+
+    sender = relationship("User", back_populates="sent_messages")

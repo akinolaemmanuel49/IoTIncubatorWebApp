@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+<!-- Custom styles for this template -->
+{% block styles %}
+<link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="col-sm-auto">
+    <h1>Alerts</h1>
+
+    <div class="row">
+      <div class="col-sm-auto">
+        <h3>Current Sensor Reading</h3>
+        <p>Temperature: {{ current_sensor_reading.temperature }}</p>
+        <p>Humidity: {{ current_sensor_reading.humidity }}</p>
+      </div>
+
+      <div class="col-md-6">
+        {% if active_session %}
+        <h3>Threshold Alerts</h3>
+
+        {% if current_sensor_reading.temperature >= active_session.max_temperature + 5 %}
+        <div class="alert alert-danger" role="alert">
+          Temperature is 5 values above the maximum threshold. Current value: {{ current_sensor_reading.temperature }}
+        </div>
+
+        {% set alert_message = "Temperature is 5 values above the maximum threshold." %}
+        {% set alert_type = "Temperature Alert" %}
+        {% set alert_email = current_user.email %}
+        {{ create_message(alert_message, alert_type, alert_email) }}
+        {% endif %}
+
+        {% if current_sensor_reading.temperature <= active_session.min_temperature - 5 %} <div
+          class="alert alert-danger" role="alert">
+          Temperature is 5 values below the minimum threshold. Current value: {{ current_sensor_reading.temperature }}
+      </div>
+
+      {% set alert_message = "Temperature is 5 values below the minimum threshold." %}
+      {% set alert_type = "Temperature Alert" %}
+      {% set alert_email = current_user.email %}
+      {{ create_message(alert_message, alert_type, alert_email) }}
+      {% endif %}
+
+      {% if current_sensor_reading.humidity >= active_session.max_humidity + 5 %}
+      <div class="alert alert-danger" role="alert">
+        Humidity is 5 values above the maximum threshold. Current value: {{ current_sensor_reading.humidity }}
+      </div>
+
+      {% set alert_message = "Humidity is 5 values above the maximum threshold." %}
+      {% set alert_type = "Humidity Alert" %}
+      {% set alert_email = current_user.email %}
+      {{ create_message(alert_message, alert_type, alert_email) }}
+      {% endif %}
+
+      {% if current_sensor_reading.humidity <= active_session.min_humidity - 5 %} <div class="alert alert-danger"
+        role="alert">
+        Humidity is 5 values below the minimum threshold. Current value: {{ current_sensor_reading.humidity }}
+    </div>
+
+    {% set alert_message = "Humidity is 5 values below the minimum threshold." %}
+    {% set alert_type = "Humidity Alert" %}
+    {% set alert_email = current_user.email %}
+    {{ create_message(alert_message, alert_type, alert_email) }}
+    {% endif %}
+    {% endif %}
+  </div>
+
+  {% if current_user.sent_messages %}
+  <h3>Sent Messages</h3>
+  <ul>
+    {% for message in current_user.sent_messages %}
+    <li>
+      <h4>{{ message.subject }}</h4>
+      <p>{{ message.body }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  </div>
+  {% endblock %}
+  </div>
+</main>
