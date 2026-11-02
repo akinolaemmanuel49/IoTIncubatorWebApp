@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
 import secrets
 import smtplib
 
@@ -14,7 +15,7 @@ from database.schemas import User, engine, SessionData, SensorData, Message
 
 app = Flask(__name__)
 # Generate a secure secret key
-secret_key = secrets.token_hex(16)
+secret_key = os.environ.get("FLASK_SECRET_KEY", secrets.token_hex(16))
 
 # Set the secret key in the Flask app
 app.secret_key = secret_key
@@ -24,12 +25,17 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
+
 def send_email_alert(subject: str, message: str, user: User):
     db_session = Session()
 
-    sender_email = 'biteatertest@gmail.com'  # Replace with your email address
-    receiver_email = user.email  # Replace with the recipient's email address
-    password = 'zvoe ikhd zpvs zrfa'  # Replace with your email password
+    sender_email = os.getenv("EMAIL_SENDER", "noreply@example.com")
+    password = os.getenv("EMAIL_PASSWORD")
+    receiver_email = user.email
+
+    if not password:
+        print("EMAIL_PASSWORD is not set; email alert skipped.")
+        return
 
     msg = MIMEMultipart()
     msg['From'] = sender_email
@@ -165,9 +171,9 @@ def dashboard():
                             incubation_egg_turn_period=incubation_egg_turn_period,
                             incubation_period=incubation_period)
     return render_template('dashboard.html', 
-                           title='IoT Incubator|Dashboard',
-                           heading='Dashboard',
-                           active_page='dashboard',)
+                            title='IoT Incubator|Dashboard',
+                            heading='Dashboard',
+                            active_page='dashboard',)
 
 
 @app.route('/live-monitoring', methods=['GET'])
@@ -255,7 +261,6 @@ def control_panel():
                            active_page='control_panel')
 
 
-
 @app.route('/alert')
 @login_required
 def alert():
@@ -301,4 +306,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=os.environ.get("FLASK_DEBUG", "False").lower() in {"1", "true", "yes", "on"})
